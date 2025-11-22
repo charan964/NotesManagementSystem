@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="home-wrapper">
+
+    <h1 class="fw-bold text-primary text-center mb-3">Welcome to NotesApp</h1>
+
+    <p class="text-center text-muted fs-5 mb-5">
+        A modern platform to write, manage and organize your notes easily.
+    </p>
+
+    <!-- FEATURE CARDS -->
+    <div class="row g-4 home-features">
+
+        <div class="col-md-4">
+            <div class="feature-box p-4 shadow-sm text-center">
+                <i class="fa fa-note-sticky icons"></i>
+                <h4 class="mt-3 fw-bold">Manage Notes</h4>
+                <p>Create, update, delete and secure your personal notes.</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="feature-box p-4 shadow-sm text-center">
+                <i class="fa fa-search icons"></i>
+                <h4 class="mt-3 fw-bold">Search Notes</h4>
+                <p>Find notes instantly with fast search functionality.</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="feature-box p-4 shadow-sm text-center">
+                <i class="fa fa-shield-halved icons"></i>
+                <h4 class="mt-3 fw-bold">Secure Login</h4>
+                <p>Passwords are encrypted using hashing for safety.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- LOGIN & REGISTER BUTTONS -->
+    <div class="d-flex justify-content-center gap-3 mt-5">
+        <a href="/login" class="btn btn-primary px-4">Login</a>
+        <a href="/register" class="btn btn-outline-primary px-4">Register</a>
+    </div>
+
+</div>
+
+{% endblock %}

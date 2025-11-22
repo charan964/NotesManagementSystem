@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="auth-wrapper">
+    <div class="auth-card shadow-lg p-4">
+
+        <h3 class="fw-bold text-primary text-center mb-4">Login</h3>
+
+        <form method="POST">
+
+            <input type="text" name="username" class="form-control mb-3"
+                   placeholder="Username" required>
+
+            <input type="password" name="password" class="form-control mb-1"
+                   placeholder="Password" required>
+
+            <p class="text-end">
+                <a href="/resetpassword" class="text-primary" style="font-size:14px;">Forgot Password?</a>
+            </p>
+
+            <button class="btn btn-primary w-100 mt-2">Login</button>
+        </form>
+
+        <p class="text-center mt-3">
+            Don't have an account?
+            <a href="/register">Register</a>
+        </p>
+
+    </div>
+</div>
+
+{% endblock %}

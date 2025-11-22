@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="page-title">Add Note</h2>
+
+<div class="mini-card shadow-sm p-4">
+
+    <form method="POST">
+        <label class="fw-semibold mb-1">Title</label>
+        <input type="text" name="title" class="form-control mb-3" required>
+
+        <label class="fw-semibold mb-1">Content</label>
+        <textarea name="content" class="form-control mb-3" rows="6" required></textarea>
+
+        <button class="btn btn-primary w-100 mt-2">Save Note</button>
+    </form>
+
+</div>
+
+{% endblock %}

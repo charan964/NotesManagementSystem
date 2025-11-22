@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3 class="fw-bold mb-3">Add Student</h3>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+
+        <form method="POST">
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Student Name</label>
+                <input type="text" class="form-control" name="name" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Roll Number</label>
+                <input type="text" class="form-control" name="roll" required>
+            </div>
+
+            <button class="btn btn-primary">Add Student</button>
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="page-container">
+
+    <h2 class="page-title">My Notes</h2>
+
+    <div class="row g-4">
+
+        {% for n in notes %}
+        <div class="col-sm-6 col-md-4 col-lg-3 d-flex">
+
+            <div class="note-mini-card shadow-sm p-3 w-100 h-100 d-flex flex-column">
+
+                <h5 class="fw-bold text-primary">{{ n.title }}</h5>
+
+                <p class="text-muted small flex-grow-1 mt-2">{{ n.content[:130] }}...</p>
+
+                <div class="mt-3 d-flex justify-content-between">
+                    <a href="/viewnote/{{ n.id }}" class="btn btn-outline-primary btn-sm">View</a>
+                    <a href="/updatenote/{{ n.id }}" class="btn btn-outline-warning btn-sm">Edit</a>
+                    <a href="/deletenote/{{ n.id }}" onclick="return confirm('Delete this note?')" class="btn btn-outline-danger btn-sm">
+                        Delete
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

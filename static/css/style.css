@@ -1,0 +1,399 @@
+/* ==========================================================
+   GLOBAL STYLES
+========================================================== */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Inter", sans-serif;
+    background: #f4f7fc;
+    transition: background 0.3s, color 0.3s;
+}
+
+/* Prevent overlap under navbar */
+.main-wrapper {
+    padding-top: 100px;
+    padding-bottom: 80px;
+}
+
+/* Remove floating button from everywhere */
+.floating-btn {
+    display: none !important;
+}
+
+
+/* ==========================================================
+   NAVBAR
+========================================================== */
+
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 5;
+    background: #0d6efd !important;
+}
+
+.navbar .nav-link {
+    font-weight: 500;
+    color: white !important;
+}
+
+.navbar-brand {
+    color: white !important;
+    font-size: 1.4rem;
+}
+
+
+
+/* ==========================================================
+   FOOTER
+========================================================== */
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #0d6efd !important;
+    color: white;
+}
+
+
+
+/* ==========================================================
+   HOME PAGE (NO BACKGROUND IMAGE)
+========================================================== */
+
+.home-wrapper {
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.home-wrapper h1 {
+    font-size: 2.6rem;
+    font-weight: 700;
+}
+
+.home-wrapper p {
+    color: #555;
+}
+
+/* Feature Cards Section */
+.home-features .feature-box {
+    background: white;
+    border-radius: 14px;
+    padding: 25px;
+    border: 1px solid #e3e3e3;
+    transition: 0.3s ease;
+    min-height: 230px;
+}
+
+.feature-box:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.1);
+}
+
+.feature-box .icons {
+    font-size: 45px;
+    margin-bottom: 12px;
+    color: #0d6efd;
+}
+
+
+
+/* ==========================================================
+   LOGIN & REGISTER (CLEAN WHITE CARDS)
+========================================================== */
+
+.auth-wrapper {
+    min-height: 75vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth-card {
+    width: 380px;
+    background: white;
+    border-radius: 14px;
+    padding: 30px;
+    border: 1px solid #dddddd;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+.auth-card h3 {
+    font-weight: 700;
+}
+
+.auth-card input {
+    height: 45px;
+    border-radius: 8px;
+}
+
+
+
+/* ==========================================================
+   DASHBOARD CARDS
+========================================================== */
+
+.glass-card, .card {
+    border-radius: 15px;
+    padding: 25px !important;
+    background: white;
+    transition: 0.3s ease;
+    border: 1px solid #ddd;
+}
+
+.card:hover, .glass-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+}
+
+.glass-card i, .card i {
+    font-size: 40px;
+    text-align: center;
+    display: block;
+    margin-bottom: 12px;
+}
+
+
+
+/* ==========================================================
+   VIEW NOTES + NOTE CARDS
+========================================================== */
+
+.note-card {
+    border-radius: 12px;
+    border: 1px solid #ddd;
+}
+
+.note-card h5 {
+    font-weight: 600;
+}
+
+.note-card i {
+    font-size: 18px !important;
+}
+
+
+
+/* ==========================================================
+   INPUT FIELDS (GLOBAL)
+========================================================== */
+
+input, textarea {
+    border-radius: 8px !important;
+    border: 1px solid #ccc !important;
+}
+
+
+
+textarea {
+    resize: vertical;
+}
+
+
+
+/* ==========================================================
+   DARK MODE SUPPORT
+========================================================== */
+
+.dark-mode {
+    background: #0d1117 !important;
+    color: #e6edf3 !important;
+}
+
+.dark-mode .navbar,
+.dark-mode footer {
+    background: #161b22 !important;
+}
+
+.dark-mode .feature-box,
+.dark-mode .card,
+.dark-mode .glass-card,
+.dark-mode .auth-card {
+    background: #161b22 !important;
+    border: 1px solid #30363d !important;
+    color: white !important;
+}
+
+.dark-mode input,
+.dark-mode textarea {
+    background: #0d1117 !important;
+    border: 1px solid #30363d !important;
+    color: white !important;
+}
+
+
+
+/* ==========================================================
+   RESPONSIVE DESIGN
+========================================================== */
+
+@media (max-width: 768px) {
+    .auth-card {
+        width: 90%;
+    }
+
+    .home-wrapper h1 {
+        font-size: 2rem;
+    }
+
+    .feature-box {
+        min-height: auto;
+    }
+}
+/* ======================
+   COMPACT DASHBOARD CARDS
+========================*/
+
+.dash-card {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    transition: 0.25s ease;
+    min-height: 150px;   /* Smaller height */
+}
+
+.dash-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+}
+
+/* Smaller compact icons */
+.dash-icon {
+    font-size: 32px;
+}
+
+/* Responsive center alignment */
+@media (max-width: 768px) {
+    .dash-card {
+        min-height: 130px;
+    }
+    .dash-icon {
+        font-size: 28px;
+    }
+}
+/* =====================================
+   COMPACT FORM CARD (Add Note, Search)
+===================================== */
+.mini-card {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    max-width: 650px;
+    margin: auto;
+    transition: 0.25s ease;
+}
+
+.mini-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+}
+
+
+/* =====================================
+   COMPACT NOTE CARD (My Notes, Search Results)
+===================================== */
+.note-mini-card {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    min-height: 180px;
+    transition: 0.25s;
+}
+
+.note-mini-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+
+/* =====================================
+   DARK MODE SUPPORT
+===================================== */
+.dark-mode .mini-card,
+.dark-mode .note-mini-card {
+    background: #161b22 !important;
+    border: 1px solid #30363d !important;
+    color: white !important;
+}
+
+.dark-mode textarea,
+.dark-mode input {
+    background: #0d1117 !important;
+    border: 1px solid #30363d !important;
+}
+/* Center page titles */
+.page-title {
+    text-align: center;
+    font-weight: 700;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: #0d6efd;
+}
+
+/* Subheading style */
+.page-subtitle {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #555;
+    margin-top: -20px;
+    margin-bottom: 25px;
+}
+
+/* Dark mode heading fix */
+.dark-mode .page-title {
+    color: #58a6ff !important;
+}
+
+.dark-mode .page-subtitle {
+    color: #9aa6b2 !important;
+}
+/* Fix card layout alignment */
+.note-mini-card {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    transition: 0.25s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Smooth hover */
+.note-mini-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+/* Fix inconsistent heights by stretching content */
+.note-mini-card p {
+    flex-grow: 1;
+}
+
+/* Dark mode support */
+.dark-mode .note-mini-card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    color: white;
+}
+/* Page container adds left/right spacing */
+.page-container {
+    max-width: 1250px;
+    margin: auto;
+    padding: 0 20px;
+}
+
+/* Improve note grid spacing */
+.page-container .row {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+/* Responsive for small screens */
+@media (max-width: 768px) {
+    .page-container {
+        padding: 0 10px;
+    }
+}
