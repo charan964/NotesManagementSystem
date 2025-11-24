@@ -1,29 +1,51 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="auth-wrapper">
-    <div class="auth-card shadow-lg p-4">
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 90vh;">
 
-        <h3 class="fw-bold text-primary text-center mb-4">Register</h3>
+    <div class="card shadow-lg p-4" style="width: 420px; border-radius: 15px;">
+
+        <h3 class="text-center mb-3 fw-bold">Create Account</h3>
+
+        <!-- FLASH MESSAGES -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="mb-3">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <!-- END FLASH -->
 
         <form method="POST">
 
-            <input type="text" name="username" class="form-control mb-3"
-                   placeholder="Username" required>
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <input type="text" name="username" class="form-control" required>
+            </div>
 
-            <input type="email" name="email" class="form-control mb-3"
-                   placeholder="Email Address" required>
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" required>
+            </div>
 
-            <input type="password" name="password" class="form-control mb-3"
-                   placeholder="Password" required>
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
 
-            <button class="btn btn-primary w-100">Create Account</button>
+            <button class="btn btn-primary w-100">Register</button>
+
+            <p class="text-center mt-3">
+                Already have an account? <a href="/login">Login</a>
+            </p>
+
         </form>
-
-        <p class="text-center mt-3">
-            Already have an account? <a href="/login">Login</a>
-        </p>
-
     </div>
 </div>
 
