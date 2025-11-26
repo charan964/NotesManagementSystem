@@ -1,32 +1,45 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="auth-wrapper">
-    <div class="auth-card shadow-lg p-4">
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 90vh;">
+  <div class="card shadow-lg p-4" style="width: 400px; border-radius: 16px;">
 
-        <h3 class="fw-bold text-primary text-center mb-4">Login</h3>
+    <h3 class="text-center mb-3 fw-bold">Login</h3>
 
-        <form method="POST">
+    <!-- FLASH MESSAGES -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="mb-3">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    <!-- END FLASH -->
 
-            <input type="text" name="username" class="form-control mb-3"
-                   placeholder="Username" required>
+    <form method="POST">
+      <div class="mb-3">
+        <label class="form-label">Username</label>
+        <input type="text" name="username" class="form-control" required>
+      </div>
 
-            <input type="password" name="password" class="form-control mb-1"
-                   placeholder="Password" required>
+      <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input type="password" name="password" class="form-control" required>
+      </div>
 
-            <p class="text-end">
-                <a href="/resetpassword" class="text-primary" style="font-size:14px;">Forgot Password?</a>
-            </p>
+      <button class="btn btn-primary w-100">Login</button>
 
-            <button class="btn btn-primary w-100 mt-2">Login</button>
-        </form>
-
-        <p class="text-center mt-3">
-            Don't have an account?
-            <a href="/register">Register</a>
-        </p>
-
-    </div>
+      <div class="d-flex justify-content-between mt-3">
+        <a href="{{ url_for('resetpassword') }}">Forgot password?</a>
+        <a href="{{ url_for('register') }}">Create account</a>
+      </div>
+    </form>
+  </div>
 </div>
 
 {% endblock %}
