@@ -1,32 +1,58 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h2 class="page-title">Welcome, {{ session.username }} 👋</h2>
+<div class="container page-top-space mb-5">
 
-<div class="row g-3 justify-content-center">
+    <!-- Heading -->
+    <h2 class="text-center fw-bold text-primary mb-4">Dashboard</h2>
 
-    <div class="col-6 col-md-3">
-        <div class="dash-card shadow-sm text-center p-3">
-            <i class="fa fa-plus dash-icon text-primary"></i>
-            <h5 class="fw-semibold mt-2">Add Note</h5>
-            <a href="/addnote" class="btn btn-primary btn-sm w-100 mt-2">Open</a>
+    <!-- Welcome message -->
+    <p class="text-center text-muted fs-5 mb-4">
+        Hi {{ session.username }}, manage your notes easily from here.
+    </p>
+
+    <!-- Dashboard Cards -->
+    <div class="row justify-content-center">
+
+        <!-- Add Note -->
+        <div class="col-md-4 col-sm-6 mb-4">
+            <a href="/addnote" class="text-decoration-none">
+                <div class="dash-card shadow-lg p-4 text-center">
+                    <div class="icon-circle bg-primary text-white mb-3">
+                        <i class="fa-solid fa-plus fs-3"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark">Add Note</h4>
+                    <p class="text-muted">Create a new note instantly.</p>
+                </div>
+            </a>
         </div>
-    </div>
 
-    <div class="col-6 col-md-3">
-        <div class="dash-card shadow-sm text-center p-3">
-            <i class="fa fa-folder-open dash-icon text-primary"></i>
-            <h5 class="fw-semibold mt-2">My Notes</h5>
-            <a href="/viewall" class="btn btn-primary btn-sm w-100 mt-2">Open</a>
+        <!-- My Notes -->
+        <div class="col-md-4 col-sm-6 mb-4">
+            <a href="/viewall" class="text-decoration-none">
+                <div class="dash-card shadow-lg p-4 text-center">
+                    <div class="icon-circle bg-success text-white mb-3">
+                        <i class="fa-solid fa-note-sticky fs-3"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark">My Notes</h4>
+                    <p class="text-muted">View and manage all your notes.</p>
+                </div>
+            </a>
         </div>
-    </div>
 
-    <div class="col-6 col-md-3">
-        <div class="dash-card shadow-sm text-center p-3">
-            <i class="fa fa-search dash-icon text-primary"></i>
-            <h5 class="fw-semibold mt-2">Search</h5>
-            <a href="/search" class="btn btn-primary btn-sm w-100 mt-2">Open</a>
+        <!-- Search Notes -->
+        <div class="col-md-4 col-sm-6 mb-4">
+            <a href="/search" class="text-decoration-none">
+                <div class="dash-card shadow-lg p-4 text-center">
+                    <div class="icon-circle bg-warning text-white mb-3">
+                        <i class="fa-solid fa-magnifying-glass fs-3"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark">Search</h4>
+                    <p class="text-muted">Find your notes quickly.</p>
+                </div>
+            </a>
         </div>
+
     </div>
 
 </div>
