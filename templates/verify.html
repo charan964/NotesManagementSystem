@@ -1,31 +1,27 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
-  <div class="card shadow-lg p-4 text-center" style="max-width: 500px; border-radius: 18px;">
+<div class="container d-flex justify-content-center mt-5">
+    <div class="card shadow p-4" style="width: 28rem;">
+        <h3 class="text-center mb-3">Verify OTP</h3>
 
-    {% if status == "success" %}
-      <h3 class="mb-3 text-success">Email Verified ✅</h3>
-      <p class="mb-4">
-        Thank you{% if username %}, <b>{{ username }}</b>{% endif %}!<br>
-        Your account has been activated. You can now log in.
-      </p>
-      <a href="{{ url_for('login') }}" class="btn btn-primary">Go to Login</a>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, msg in messages %}
+              <div class="alert alert-{{ category }}">{{ msg }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
 
-    {% elif status == "invalid" %}
-      <h3 class="mb-3 text-danger">Invalid or Expired Link ❌</h3>
-      <p class="mb-4">
-        The verification link is invalid or has already been used.
-      </p>
-      <a href="{{ url_for('register') }}" class="btn btn-outline-primary">Go to Register</a>
+        <form action="{{ url_for('verify_otp') }}" method="POST">
+            <div class="mb-3">
+                <label>Enter OTP</label>
+                <input type="text" name="otp" class="form-control" required>
+            </div>
 
-    {% else %}
-      <h3 class="mb-3">Verification Status</h3>
-      <p>Unknown verification status.</p>
-      <a href="{{ url_for('login') }}" class="btn btn-primary">Go to Login</a>
-    {% endif %}
-
-  </div>
+            <button class="btn btn-success w-100">Verify OTP</button>
+        </form>
+    </div>
 </div>
 
 {% endblock %}

@@ -2,44 +2,52 @@
 {% block content %}
 
 <div class="container d-flex justify-content-center align-items-center" style="min-height: 90vh;">
-  <div class="card shadow-lg p-4" style="width: 400px; border-radius: 16px;">
+    <div class="card shadow-lg p-4" style="width: 420px; border-radius: 15px;">
 
-    <h3 class="text-center mb-3 fw-bold">Login</h3>
+        <h3 class="text-center mb-3">Welcome Back</h3>
+        <p class="text-center text-muted">Login to continue</p>
 
-    <!-- FLASH MESSAGES -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <div class="mb-3">
-          {% for category, message in messages %}
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div>
+            {% for category, message in messages %}
             <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-              {{ message }}
-              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
-          {% endfor %}
+            {% endfor %}
         </div>
-      {% endif %}
-    {% endwith %}
-    <!-- END FLASH -->
+        {% endif %}
+        {% endwith %}
 
-    <form method="POST">
-      <div class="mb-3">
-        <label class="form-label">Username</label>
-        <input type="text" name="username" class="form-control" required>
-      </div>
+        <!-- LOGIN FORM -->
+        <form method="POST" action="{{ url_for('login') }}">
 
-      <div class="mb-3">
-        <label class="form-label">Password</label>
-        <input type="password" name="password" class="form-control" required>
-      </div>
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <input type="text" name="username" class="form-control" placeholder="Enter username" required>
+            </div>
 
-      <button class="btn btn-primary w-100">Login</button>
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" placeholder="Enter password" required>
+            </div>
 
-      <div class="d-flex justify-content-between mt-3">
-        <a href="{{ url_for('resetpassword') }}">Forgot password?</a>
-        <a href="{{ url_for('register') }}">Create account</a>
-      </div>
-    </form>
-  </div>
+            <button type="submit" class="btn btn-primary w-100 mt-2">Login</button>
+        </form>
+
+        <div class="text-center mt-3">
+            <a href="{{ url_for('forgot_password') }}" class="text-danger">Forgot Password?</a>
+        </div>
+
+        <div class="text-center mt-2">
+            <p class="mb-1">Don't have an account?
+                <a href="{{ url_for('register') }}" class="text-primary">Register</a>
+            </p>
+        </div>
+
+    </div>
 </div>
 
 {% endblock %}
