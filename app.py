@@ -1,13 +1,9 @@
 from flask import Flask, render_template, request, redirect, session, flash
 import mysql.connector
 from werkzeug.security import generate_password_hash, check_password_hash
-import random
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 
 # ==========================================
-# DB CONNECTION
+# DATABASE CONNECTION
 # ==========================================
 def get_connection():
     return mysql.connector.connect(
@@ -17,6 +13,7 @@ def get_connection():
         database="notes_db",
         buffered=True
     )
+
 
 # ==========================================
 # FLASK APP
@@ -34,115 +31,51 @@ def index():
 
 
 # ==========================================
-# REGISTER (SEND OTP)
+# REGISTER (NO OTP)
 # ==========================================
 @app.route("/register", methods=["GET", "POST"])
 def register():
-
     if request.method == "POST":
-        username = request.form["username"]
-        email = request.form["email"]
+        username = request.form.get("username").strip()
+        email = request.form.get("email").strip()
+        password = request.form.get("password").strip()
+        confirm = request.form.get("confirm_password").strip()
+
+        if password != confirm:
+            flash("Passwords do not match!", "danger")
+            return redirect("/register")
 
         conn = get_connection()
         cur = conn.cursor(dictionary=True)
 
-        # Check existing username
+        # Check username duplicate
         cur.execute("SELECT * FROM users WHERE username=%s", (username,))
         if cur.fetchone():
             flash("Username already exists!", "danger")
             return redirect("/register")
 
-        # Check existing email
+        # Check email duplicate
         cur.execute("SELECT * FROM users WHERE email=%s", (email,))
         if cur.fetchone():
             flash("Email already registered!", "danger")
             return redirect("/register")
 
-        # Store temporarily
-        session["temp_username"] = username
-        session["temp_email"] = email
+        hashed = generate_password_hash(password)
 
-        # Generate OTP
-        otp = random.randint(100000, 999999)
-        session["reg_otp"] = otp
-
-        # Send OTP
-        sender = "charantejamamidi001@gmail.com"
-        password = "bucm sdoy tpko ggyh"  # Gmail App Password
-
-        msg = MIMEMultipart()
-        msg["From"] = sender
-        msg["To"] = email
-        msg["Subject"] = "Email Verification - Notes App"
-        msg.attach(MIMEText(f"<h3>Your OTP: <b>{otp}</b></h3>", "html"))
-
-        try:
-            server = smtplib.SMTP("smtp.gmail.com", 587)
-            server.starttls()
-            server.login(sender, password)
-            server.sendmail(sender, email, msg.as_string())
-            server.quit()
-
-            flash("OTP sent to your email!", "success")
-            return redirect("/verify_otp")
-
-        except Exception as e:
-            flash("Email error: " + str(e), "danger")
-
-    return render_template("register.html")
-
-
-# ==========================================
-# VERIFY OTP
-# ==========================================
-@app.route("/verify_otp", methods=["GET", "POST"])
-def verify_otp():
-
-    if request.method == "POST":
-        otp_entered = request.form["otp"]
-
-        if str(session.get("reg_otp")) == otp_entered:
-            return redirect("/set_password")
-
-        flash("Incorrect OTP!", "danger")
-        return redirect("/verify_otp")
-
-    return render_template("verify.html")
-
-
-# ==========================================
-# SET PASSWORD
-# ==========================================
-@app.route("/set_password", methods=["GET", "POST"])
-def set_password():
-
-    if request.method == "POST":
-        password = request.form["password"]
-        hashed_pwd = generate_password_hash(password)
-
-        uname = session.get("temp_username")
-        email = session.get("temp_email")
-
-        conn = get_connection()
         cur = conn.cursor()
-
         cur.execute("""
             INSERT INTO users(username, email, password, verified)
-            VALUES (%s, %s, %s, 1)
-        """, (uname, email, hashed_pwd))
+            VALUES(%s, %s, %s, 1)
+        """, (username, email, hashed))
 
         conn.commit()
         cur.close()
-
-        # clear temp
-        session.pop("temp_username", None)
-        session.pop("temp_email", None)
-        session.pop("reg_otp", None)
+        conn.close()
 
         flash("Registration successful! Please login.", "success")
         return redirect("/login")
 
-    return render_template("set_password.html")
+    return render_template("register.html")
 
 
 # ==========================================
@@ -150,10 +83,9 @@ def set_password():
 # ==========================================
 @app.route("/login", methods=["GET", "POST"])
 def login():
-
     if request.method == "POST":
-        username = request.form["username"]
-        pwd = request.form["password"]
+        username = request.form.get("username").strip()
+        password = request.form.get("password").strip()
 
         conn = get_connection()
         cur = conn.cursor(dictionary=True)
@@ -161,7 +93,10 @@ def login():
         cur.execute("SELECT * FROM users WHERE username=%s", (username,))
         user = cur.fetchone()
 
-        if user and check_password_hash(user["password"], pwd):
+        cur.close()
+        conn.close()
+
+        if user and check_password_hash(user["password"], password):
             session["user_id"] = user["id"]
             session["username"] = user["username"]
             return redirect("/dashboard")
@@ -195,13 +130,12 @@ def dashboard():
 # ==========================================
 @app.route("/addnote", methods=["GET", "POST"])
 def addnote():
-
     if "user_id" not in session:
         return redirect("/login")
 
     if request.method == "POST":
-        title = request.form["title"]
-        content = request.form["content"]
+        title = request.form.get("title").strip()
+        content = request.form.get("content").strip()
 
         conn = get_connection()
         cur = conn.cursor()
@@ -213,8 +147,9 @@ def addnote():
 
         conn.commit()
         cur.close()
+        conn.close()
 
-        flash("Note added!", "success")
+        flash("Note added successfully!", "success")
         return redirect("/viewall")
 
     return render_template("add_note.html")
@@ -225,7 +160,6 @@ def addnote():
 # ==========================================
 @app.route("/viewall")
 def viewall():
-
     if "user_id" not in session:
         return redirect("/login")
 
@@ -235,6 +169,9 @@ def viewall():
     cur.execute("SELECT * FROM notes WHERE user_id=%s ORDER BY id DESC", (session["user_id"],))
     notes = cur.fetchall()
 
+    cur.close()
+    conn.close()
+
     return render_template("view_notes.html", notes=notes)
 
 
@@ -243,7 +180,6 @@ def viewall():
 # ==========================================
 @app.route("/viewnote/<int:id>")
 def viewnote(id):
-
     if "user_id" not in session:
         return redirect("/login")
 
@@ -253,15 +189,21 @@ def viewnote(id):
     cur.execute("SELECT * FROM notes WHERE id=%s AND user_id=%s", (id, session["user_id"]))
     note = cur.fetchone()
 
+    cur.close()
+    conn.close()
+
+    if not note:
+        flash("Note not found!", "danger")
+        return redirect("/viewall")
+
     return render_template("viewnote.html", note=note)
 
 
 # ==========================================
-# UPDATE NOTE (FULLY FIXED)
+# UPDATE NOTE
 # ==========================================
 @app.route("/updatenote/<int:id>", methods=["GET", "POST"])
 def updatenote(id):
-
     if "user_id" not in session:
         return redirect("/login")
 
@@ -276,22 +218,26 @@ def updatenote(id):
         flash("Note not found!", "danger")
         return redirect("/viewall")
 
-    # Update note on POST
     if request.method == "POST":
-        title = request.form["title"]
-        content = request.form["content"]
+        new_title = request.form.get("title").strip()
+        new_content = request.form.get("content").strip()
 
         cur2 = conn.cursor()
-        cur2.execute("UPDATE notes SET title=%s, content=%s WHERE id=%s",
-                     (title, content, id))
-        conn.commit()
+        cur2.execute("""
+            UPDATE notes SET title=%s, content=%s WHERE id=%s AND user_id=%s
+        """, (new_title, new_content, id, session["user_id"]))
 
-        flash("Note updated successfully!", "success")
+        conn.commit()
+        cur2.close()
+        conn.close()
+
+        flash("Note updated!", "success")
         return redirect("/viewall")
 
-    # Render update page
-    return render_template("update_note.html", note=note)
+    cur.close()
+    conn.close()
 
+    return render_template("update_note.html", note=note)
 
 
 # ==========================================
@@ -299,7 +245,6 @@ def updatenote(id):
 # ==========================================
 @app.route("/deletenote/<int:id>")
 def deletenote(id):
-
     if "user_id" not in session:
         return redirect("/login")
 
@@ -309,7 +254,10 @@ def deletenote(id):
     cur.execute("DELETE FROM notes WHERE id=%s AND user_id=%s", (id, session["user_id"]))
     conn.commit()
 
-    flash("Note deleted!", "info")
+    cur.close()
+    conn.close()
+
+    flash("Note deleted.", "info")
     return redirect("/viewall")
 
 
@@ -318,30 +266,32 @@ def deletenote(id):
 # ==========================================
 @app.route("/search", methods=["GET", "POST"])
 def search():
-
     if "user_id" not in session:
         return redirect("/login")
 
     results = []
 
     if request.method == "POST":
-        query = request.form["query"]
+        query = request.form.get("query").strip()
 
         conn = get_connection()
         cur = conn.cursor(dictionary=True)
 
         cur.execute("""
-            SELECT * FROM notes 
+            SELECT * FROM notes
             WHERE user_id=%s AND (title LIKE %s OR content LIKE %s)
         """, (session["user_id"], f"%{query}%", f"%{query}%"))
 
         results = cur.fetchall()
 
+        cur.close()
+        conn.close()
+
     return render_template("search.html", results=results)
 
 
 # ==========================================
-# ABOUT PAGE
+# ABOUT
 # ==========================================
 @app.route("/about")
 def about():
@@ -349,105 +299,11 @@ def about():
 
 
 # ==========================================
-# CONTACT PAGE
+# CONTACT
 # ==========================================
 @app.route("/contact")
 def contact():
     return render_template("contact.html")
-
-
-# ==========================================
-# FORGOT PASSWORD
-# ==========================================
-@app.route("/forgot_password", methods=["GET", "POST"])
-def forgot_password():
-
-    if request.method == "POST":
-        email = request.form["email"]
-
-        conn = get_connection()
-        cur = conn.cursor(dictionary=True)
-
-        cur.execute("SELECT * FROM users WHERE email=%s", (email,))
-        user = cur.fetchone()
-
-        if not user:
-            flash("Email not found!", "danger")
-            return redirect("/forgot_password")
-
-        otp = random.randint(100000, 999999)
-
-        session["reset_email"] = email
-        session["reset_otp"] = otp
-
-        sender = "charantejamamidi001@gmail.com"
-        password = "bucm sdoy tpko ggyh"
-
-        msg = MIMEMultipart()
-        msg["From"] = sender
-        msg["To"] = email
-        msg["Subject"] = "Password Reset OTP"
-        msg.attach(MIMEText(f"<h3>Your OTP: <b>{otp}</b></h3>", "html"))
-
-        try:
-            server = smtplib.SMTP("smtp.gmail.com", 587)
-            server.starttls()
-            server.login(sender, password)
-            server.sendmail(sender, email, msg.as_string())
-            server.quit()
-
-            flash("OTP sent to your email!", "success")
-            return redirect("/reset_verify")
-
-        except Exception as e:
-            flash(str(e), "danger")
-
-    return render_template("forgot_password.html")
-
-
-# ==========================================
-# VERIFY RESET OTP
-# ==========================================
-@app.route("/reset_verify", methods=["GET", "POST"])
-def reset_verify():
-
-    if request.method == "POST":
-        otp = request.form["otp"]
-
-        if str(session.get("reset_otp")) == otp:
-            return redirect("/reset_new_password")
-
-        flash("Incorrect OTP!", "danger")
-        return redirect("/reset_verify")
-
-    return render_template("reset_verify.html")
-
-
-# ==========================================
-# RESET NEW PASSWORD
-# ==========================================
-@app.route("/reset_new_password", methods=["GET", "POST"])
-def reset_new_password():
-
-    if request.method == "POST":
-        new_pwd = request.form["password"]
-        hashed = generate_password_hash(new_pwd)
-
-        email = session.get("reset_email")
-
-        conn = get_connection()
-        cur = conn.cursor()
-
-        cur.execute("UPDATE users SET password=%s WHERE email=%s", (hashed, email))
-        conn.commit()
-
-        session.pop("reset_email", None)
-        session.pop("reset_otp", None)
-
-        flash("Password reset successfully!", "success")
-        return redirect("/login")
-
-    return render_template("reset_new_password.html")
 
 
 # ==========================================

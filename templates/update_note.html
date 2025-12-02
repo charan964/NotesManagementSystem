@@ -1,21 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="container d-flex justify-content-center mt-5 mb-5">
-    <div class="card shadow-lg p-4" style="width: 650px;">
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="card shadow-lg p-4 border-0" style="width: 600px;">
 
-        <h2 class="text-center mb-4 fw-bold text-primary">Update Note</h2>
-
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, msg in messages %}
-            <div class="alert alert-{{ category }} alert-dismissible fade show">
-                {{ msg }}
-                <button class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-            {% endfor %}
-        {% endif %}
-        {% endwith %}
+        <h3 class="text-center fw-bold text-primary mb-3">Update Note</h3>
 
         <form method="POST">
 
@@ -24,15 +13,14 @@
                    value="{{ note.title }}" required>
 
             <label class="form-label fw-bold mt-3">Content</label>
-            <textarea name="content" class="form-control" rows="6"
-                      required>{{ note.content }}</textarea>
+            <textarea name="content" class="form-control" rows="6" required>{{ note.content }}</textarea>
 
-            <div class="mt-4 text-center">
-                <button class="btn btn-primary px-4">Update</button>
-                <a href="/viewall" class="btn btn-secondary px-4 ms-2">Back</a>
+            <div class="text-center mt-4">
+                <button class="btn btn-primary px-4">Save Changes</button>
+                <a href="/viewall" class="btn btn-secondary px-4">Cancel</a>
             </div>
-
         </form>
+
     </div>
 </div>
 

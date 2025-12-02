@@ -1,28 +1,42 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="container mt-4">
+<div class="container mt-3">
     <h2 class="text-center mb-4 fw-bold text-primary">My Notes</h2>
 
     {% if notes %}
-    <div class="row">
-        {% for note in notes %}
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm p-3">
-                <h5 class="fw-bold">{{ note.title }}</h5>
-                <p class="text-muted">{{ note.content[:100] }}...</p>
+        <div class="row">
+            {% for note in notes %}
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm p-3 h-100">
 
-                <a href="/viewnote/{{ note.id }}" class="btn btn-primary btn-sm">View</a>
-                <a href="/updatenote/{{ note.id }}" class="btn btn-warning btn-sm">Edit</a>
-                <a href="/deletenote/{{ note.id }}" class="btn btn-danger btn-sm">Delete</a>
+                    <h5 class="fw-bold">{{ note.title }}</h5>
+                    <p class="text-muted">
+                        {{ note.content[:120] }}...
+                    </p>
+
+                    <!-- Button Row -->
+                    <div class="d-flex justify-content-between mt-2">
+
+                        <a href="/viewnote/{{ note.id }}" 
+                           class="btn btn-primary btn-sm">View</a>
+
+                        <a href="/updatenote/{{ note.id }}" 
+                           class="btn btn-warning btn-sm">Edit</a>
+
+                        <a href="/deletenote/{{ note.id }}" 
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('Delete this note?');">Delete</a>
+
+                    </div>
+
+                </div>
             </div>
-            
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
     {% else %}
         <p class="text-center text-muted">No notes found.</p>
     {% endif %}
 </div>
-<a href="/dashboard" class="btn btn-secondary px-4 ms-2">Back</a>
+
 {% endblock %}
